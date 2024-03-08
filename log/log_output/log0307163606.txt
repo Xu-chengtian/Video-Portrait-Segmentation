@@ -1,3 +1,0 @@
-2024-03-07 16:36:06,960 - logger - Start
-2024-03-07 16:36:06,966 - logger - Namespace(path='/Volumes/XCT_DISK2/tiktok/archive')
-2024-03-07 16:36:06,966 - logger - Generate dataset txt for : /Volumes/XCT_DISK2/tiktok/archive
