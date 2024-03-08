@@ -2,6 +2,7 @@
 *.pyc
 
 # custom
+log
 util/
 picture/
 __pychche__/
