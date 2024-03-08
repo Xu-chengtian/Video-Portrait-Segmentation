@@ -1,0 +1,4 @@
+2024-03-07 16:50:25,253 - __main__ - Start
+2024-03-07 16:50:25,260 - __main__ - Namespace(path='/Volumes/XCT_DISK2/tiktok/archive')
+2024-03-07 16:50:25,260 - __main__ - Generate dataset txt for : /Volumes/XCT_DISK2/tiktok/archive
+2024-03-07 16:50:25,261 - __main__ - handeling for folder: 00001
