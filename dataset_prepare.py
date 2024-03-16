@@ -12,11 +12,13 @@ def genearte_dataset_txt(logger, path):
     videos = os.listdir(dataset_path)
     videos.sort()
     for video in videos:
+        if video == '.DS_Store': continue
         logger.info("handeling for folder: "+video)
         video_path = os.path.join(dataset_path, video, 'images')
         frames = os.listdir(video_path)
         prev = None
         for frame in frames:
+            if frame == '.DS_Store': continue
             train.write(os.path.join(os.path.join(dataset_path, video, 'images', frame)))
             train.write(' ')
             if prev == None:
