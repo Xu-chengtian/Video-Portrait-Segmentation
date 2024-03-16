@@ -8,3 +8,4 @@ picture/
 __pychche__/
 wandb/
 multilabel/
+test.py
