@@ -9,3 +9,4 @@ __pychche__/
 wandb/
 multilabel/
 test.py
+output.png
