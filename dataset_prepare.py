@@ -40,5 +40,5 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--path', type=str, help='provide data set path')
     args = parser.parse_args()
     logger.info(args)
-    logger.info("Generate dataset txt for : "+args.path)
+    logger.info("Generate dataset txt for : "+ args.path)
     genearte_dataset_txt(logger, args.path)
