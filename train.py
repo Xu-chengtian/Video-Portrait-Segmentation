@@ -1,20 +1,26 @@
+#import the Unet Model
 from Unet import UNet
 from logger import setlogger
 from mydataset import MyDataset
-from torch.utils.data import DataLoader, random_split
 from eval import eval_net
+
+#import pytorch
 import torch
+from torch.utils.data import DataLoader, random_split
 import torch.optim as optim
 import torch.nn.functional as F
 import torch.nn as nn
 from tqdm import tqdm
 import time
+
 # import wandb
 import warnings
 import os
 import sys
 import argparse
 import logging
+
+#import evluation module
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import zero_one_loss
 from sklearn.metrics import precision_score
@@ -22,8 +28,8 @@ from sklearn.metrics import recall_score
 from sklearn.metrics import f1_score
 from sklearn.metrics import hamming_loss
 
-# 训练模型主函数
-def train_model(logger, net, device, epochs=5, batch_size=100, lr=0.1, val_percent=0.1, save_cp=True, img_scale=0.5):
+# fuction trained the model
+def train_model(logger, net, device, epochs=5, batch_size=100, lr=0.01, val_percent=0.1, save_cp=True, img_scale=0.5):
     # val_precent: precent of database use for validation
     pre_time=time.strftime('%m%d%H%M%S')
     project_name = 'prior mask' + pre_time
@@ -33,7 +39,8 @@ def train_model(logger, net, device, epochs=5, batch_size=100, lr=0.1, val_perce
     #                 "learning rate": lr}
     # wandb.config.update()
     # # 建立日志、模型存储文件夹
-    os.makedirs(os.path.join(os.getcwd(),'models',project_name))
+    dir_checkpoint = os.path.join(os.getcwd(),'models',project_name)
+    os.makedirs(dir_checkpoint)
     os.makedirs(os.path.join(os.getcwd(),'log',project_name))
 
     dataset = MyDataset(os.path.join(os.getcwd(),'dataset','train.txt'))
@@ -60,6 +67,7 @@ def train_model(logger, net, device, epochs=5, batch_size=100, lr=0.1, val_perce
     else:
         criterion = nn.BCEWithLogitsLoss()
 
+    global_step = 0
     for epoch in range(epochs):
         net.train()
         
@@ -96,15 +104,15 @@ def train_model(logger, net, device, epochs=5, batch_size=100, lr=0.1, val_perce
                     else:
                         logger.info('Validation Dice Coeff: {}'.format(val_score))
 
-        # if save_cp:
-        #     try:
-        #         os.mkdir(dir_checkpoint)
-        #         logger.info('Created checkpoint directory')
-        #     except OSError:
-        #         pass
-        #     torch.save(net.state_dict(),
-        #                dir_checkpoint + f'CP_epoch{epoch + 1}_loss_{str(loss.item())}.pth')
-        #     logger.info(f'Checkpoint {epoch + 1} saved ! loss (batch) = ' + str(loss.item()))
+            if save_cp:
+                try:
+                    os.mkdir(dir_checkpoint)
+                    logger.info('Created checkpoint directory')
+                except OSError:
+                    pass
+                torch.save(net.state_dict(),
+                        dir_checkpoint + f'CP_epoch{epoch + 1}_loss_{str(loss.item())}.pth')
+                logger.info(f'Checkpoint {epoch + 1} saved ! loss (batch) = ' + str(loss.item()))
     # wandb.finish()
 
 def get_args():
