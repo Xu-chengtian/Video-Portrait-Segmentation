@@ -2,11 +2,8 @@
 *.pyc
 
 # custom
-log
 util/
-picture/
 __pychche__/
 wandb/
-multilabel/
 test.py
-output.png
+*.png

@@ -17,6 +17,7 @@ def genearte_dataset_txt(logger, path):
         video_path = os.path.join(dataset_path, video, 'images')
         frames = os.listdir(video_path)
         prev = None
+        frames.sort()
         for frame in frames:
             if frame == '.DS_Store': continue
             train.write(os.path.join(os.path.join(dataset_path, video, 'images', frame)))
