@@ -100,5 +100,9 @@ class UNet(nn.Module):
 
 
 if __name__ == '__main__':
-    model = UNet(1, 2)
+    model = UNet(4, 1)
+    # view the structure
     print(model)
+    x = torch.rand(1, 4, 572, 572)
+    y = model(x)
+    print(y.shape)
