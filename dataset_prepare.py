@@ -43,3 +43,4 @@ if __name__ == '__main__':
     logger.info(args)
     logger.info("Generate dataset txt for : "+ args.path)
     genearte_dataset_txt(logger, args.path)
+    logger.info('End')

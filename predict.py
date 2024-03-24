@@ -42,7 +42,7 @@ def predict_img(net,
     prior_mask = transform(Image.open(prior_mask))
     combine = torch.cat([image, prior_mask],dim=0).unsqueeze(0)
     
-    print(combine.shape)
+    # print(combine.shape)
 
     img = combine.to(device=device, dtype=torch.float32)
 
