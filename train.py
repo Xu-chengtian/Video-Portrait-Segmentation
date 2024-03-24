@@ -119,7 +119,7 @@ def train_model(logger, net, device, epochs=5, batch_size=100, lr=0.01, val_perc
                         pass
 
             torch.save(net.state_dict(),
-                    dir_checkpoint + f'CP_epoch{epoch + 1}_loss_{str(loss.item())}.pth')
+                    dir_checkpoint, f'CP_epoch{epoch + 1}_loss_{str(loss.item())}.pth')
             logger.info(f'Checkpoint {epoch + 1} saved ! loss (batch) = ' + str(loss.item()))
     wandb.finish()
 
