@@ -1,6 +1,7 @@
 import argparse
 import logging
 from logger import setlogger
+from dice_loss import dice_coeff
 
 import numpy as np
 import torch
@@ -12,8 +13,8 @@ from Unet import UNet
 import matplotlib.pyplot as plt
 
 
-def plot_img_and_mask(img, mask, result):
-    fig, ax = plt.subplots(1, 3)
+def plot_img_and_mask(img, mask, result, true_mask):
+    fig, ax = plt.subplots(1, 4)
     ax[0].set_title('Input image')
     image = Image.open(img)
     ax[0].imshow(image)
@@ -23,7 +24,10 @@ def plot_img_and_mask(img, mask, result):
     ax[2].set_title(f'Output mask')
     result = Image.open(result)
     ax[2].imshow(result)
-    plt.xticks([]), plt.yticks([])
+    ax[3].set_title(f'True mask')
+    true_mask = Image.open(true_mask)
+    ax[3].imshow(true_mask)
+    plt.subplots_adjust(left=0.1, right=0.9, bottom=0.1, top=0.9, wspace=0.5, hspace=0.1)
     plt.show()
 
 
@@ -35,14 +39,14 @@ def predict_img(net,
     net.eval()
 
     transform = transforms.Compose([
-            transforms.Resize(572),
+            transforms.Resize(302),
             transforms.ToTensor(),
         ])
     image = transform(Image.open(image))
     prior_mask = transform(Image.open(prior_mask))
     combine = torch.cat([image, prior_mask],dim=0).unsqueeze(0)
     
-    # print(combine.shape)
+    # logger.info(combine.shape)
 
     img = combine.to(device=device, dtype=torch.float32)
 
@@ -59,7 +63,7 @@ def predict_img(net,
         tf = transforms.Compose(
             [
                 transforms.ToPILImage(),
-                transforms.Resize(640),
+                transforms.Resize(604),
                 transforms.ToTensor()
             ]
         )
@@ -120,6 +124,11 @@ if __name__ == "__main__":
                         out_threshold=args.mask_threshold,
                         device=device)
     
+    transform = transforms.Compose([
+            transforms.ToTensor(),
+        ])
+    logger.info("dice coefficient for this picture: "+str(dice_coeff(transform(mask), transform(Image.open(image.replace('images', 'masks')))).item()))
+    
     result = mask_to_image(mask)
     result.save(out_file)
 
@@ -127,4 +136,4 @@ if __name__ == "__main__":
 
     if args.viz:
         logger.info("Visualizing results for image {}, close to continue ...".format(image))
-        plot_img_and_mask(image, args.mask, out_file)
+        plot_img_and_mask(image, args.mask, out_file, image.replace('images', 'masks'))

@@ -43,3 +43,16 @@ If you see trian.txt file appear in dataset dirctory and no error in the console
 ### 4. run train program.
 
 Run [train.py](train.py) and provide the parameters you want.
+
+See `get_args` function in train.py for more information.
+
+Already set some parameters, it is OK to use them to train the model. But for better result, recommend changing them:
+
+- `-w API_KEY` add API_KEY in wandb, it can easily show the result table
+- `-c` combination flag, use this to train model with prior mask
+- `-d MODEL_PATH` using this to load pre-trained model.
+
+Example for training:
+
+1. `python train.py -w API_KEY` Train the model without prior mask using little dataset with default parameters.
+2. `python train.py -c -d MODEL_PATH -w API_KEY` Replace the MODEL_PATH with the result pth file in previous step. Train the model using prior mask method and whole dataset with dafault parameters

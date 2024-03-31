@@ -13,9 +13,9 @@ class MyDataset(Dataset):
         for line in fh:
             line = line.rstrip()
             paths = line.split()
-            imgs.append((paths[0], paths[1], paths[2]))
-            self.imgs = imgs 
-            # set image pre-process method
+            imgs.append((paths[0], paths[1], paths[2])) 
+        # set image pre-process method
+        self.imgs = imgs
         self.transform = transform
         self.target_transform = target_transform
         self.scale = scale
@@ -33,13 +33,13 @@ class MyDataset(Dataset):
         image, prior_mask, mask = self.imgs[index]
         image = transform(Image.open(image).resize((self.newW, self.newH), resample=Image.BICUBIC))
         prior_mask = transform(Image.open(prior_mask).resize((self.newW, self.newH), resample=Image.NEAREST))
-        combine = torch.cat([image, prior_mask],dim=0)
+        image = torch.cat([image, prior_mask],dim=0)
         mask = transform(Image.open(mask).resize((self.newW, self.newH), resample=Image.NEAREST))
         # pre-process
         if self.transform is not None:
-            combine = self.transform(combine)
+            image = self.transform(image)
             mask = self.transform(mask)
-        return combine, mask
+        return image, mask
     def __len__(self):
         # return the size of dataset
         return len(self.imgs)
