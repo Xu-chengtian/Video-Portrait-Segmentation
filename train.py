@@ -134,7 +134,7 @@ def get_args():
                         help='using combine of prior mask', dest='combine')
     parser.add_argument('-e', '--epochs', metavar='E', type=int, default=5,
                         help='Number of epochs', dest='epochs')
-    parser.add_argument('-b', '--batch-size', metavar='B', type=int, default=10,
+    parser.add_argument('-b', '--batch-size', metavar='B', type=int, default=5,
                         help='Batch size', dest='batchsize')
     parser.add_argument('-l', '--learning-rate', metavar='LR', type=float, default=0.01,
                         help='Learning rate', dest='lr')
