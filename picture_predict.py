@@ -39,11 +39,18 @@ def predict_img(net,
     net.eval()
 
     transform = transforms.Compose([
-            transforms.Resize(302),
             transforms.ToTensor(),
         ])
     image = transform(Image.open(image))
     prior_mask = transform(Image.open(prior_mask))
+    
+    # logger.info(prior_mask.shape)
+    
+    w, h = image.shape[1], image.shape[2]
+    newH, newW = int(0.5 * w), int(0.5 * h)
+    torch_resize = transforms.Resize([newH, newW])
+    image = torch_resize(image)
+    prior_mask = torch_resize(prior_mask)
     combine = torch.cat([image, prior_mask],dim=0).unsqueeze(0)
     
     # logger.info(combine.shape)
@@ -63,7 +70,7 @@ def predict_img(net,
         tf = transforms.Compose(
             [
                 transforms.ToPILImage(),
-                transforms.Resize(604),
+                transforms.Resize([w, h]),
                 transforms.ToTensor()
             ]
         )
@@ -77,8 +84,7 @@ def predict_img(net,
 def get_args():
     parser = argparse.ArgumentParser(description='Predict masks from input images',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--model', '-m', default='MODEL.pth',
-                        metavar='FILE',
+    parser.add_argument('--model', '-m', metavar='FILE',
                         help="Specify the file in which the model is stored")
     parser.add_argument('--image', '-i', metavar='INPUT',
                         help='filenames of input images', required=True)
