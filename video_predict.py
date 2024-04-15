@@ -103,11 +103,23 @@ if __name__ == "__main__":
 
     cap = cv2.VideoCapture(args.video_file) if args.video_file else cv2.VideoCapture(0)
     mask = torch.zeros(1, 1, 1)
+
+    output_path = os.path.join(os.getcwd(), 'result_imgs')
+
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
+
+    i = 0
     while (1):
+        
         ret, frame = cap.read()
+
+        if not ret:
+            print("Can't receive frame (stream end?). Exiting ...")
+            break
+
         img = Image.fromarray(frame)
         
-
         # '''
         mask = predict_img(net=net,
                         image=img,
@@ -115,10 +127,16 @@ if __name__ == "__main__":
                         out_threshold=args.mask_threshold,
                         device=device)
         # '''
+        
         result = mask_to_image(mask)
-        # print(result)
+        result_color = img * mask[:, :, None] 
+        cv2.imwrite(f"{output_path}/image_color_{i}.png", np.array(result_color))
+        cv2.imwrite(f"{output_path}/image_{i}.png", np.array(result))
+        i += 1
+        
         if args.viz:
             cv2.imshow("capture", np.array(result))
             
         if cv2.waitKey(5) & 0xFF == ord('q'):
             break
+        
